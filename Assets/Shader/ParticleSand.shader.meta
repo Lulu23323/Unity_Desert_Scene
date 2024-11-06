@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 5a357539f0b92cc4cbc32ea4e8d02c75
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _Smoke: {fileID: 2800000, guid: 80eb128b14f21214c99c7e858f00559e, type: 3}
+  - _Flowmap: {fileID: 2800000, guid: 8064523003c56b24882c8eeb589854ee, type: 3}
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

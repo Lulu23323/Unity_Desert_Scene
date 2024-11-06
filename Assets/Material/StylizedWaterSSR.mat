@@ -1,0 +1,134 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: StylizedWaterSSR
+  m_Shader: {fileID: 4800000, guid: 4f57857f0e217ea448a671de0178e186, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - USE_FOAM
+  - USE_PROCEDURAL_CAUSTIC
+  - USE_SHADOW
+  - _REFTYPE_SSR
+  m_InvalidKeywords:
+  - _ENABLEDYNAMICFOAM_ON
+  - _REFTYPE_SSPR
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3000
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _CausticMap:
+        m_Texture: {fileID: 2800000, guid: 744ff0bbd92e5bd41a70b5102327485b, type: 3}
+        m_Scale: {x: 2, y: 2}
+        m_Offset: {x: 0, y: 0}
+    - _CloudMap:
+        m_Texture: {fileID: 2800000, guid: 4fe079355368a774db01eb35ec27640d, type: 3}
+        m_Scale: {x: 5, y: 5}
+        m_Offset: {x: 0, y: 0}
+    - _CubeMap:
+        m_Texture: {fileID: 8900000, guid: 2c981d4c630377d4e8faebb020dba4b8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 2800000, guid: 465b25f3a0ee540ec9ba20aeef7a1307, type: 3}
+        m_Scale: {x: 0.1, y: 0.1}
+        m_Offset: {x: 0, y: 0}
+    - _FoamMap:
+        m_Texture: {fileID: 2800000, guid: 5ea3d632911c4b648893c5f9eb4b46a0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FoamNoiseMap:
+        m_Texture: {fileID: 2800000, guid: 56fc026eb79effe4b85400592e33d639, type: 3}
+        m_Scale: {x: 0.2, y: 0.2}
+        m_Offset: {x: 0, y: 0}
+    - _FoamTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Noise:
+        m_Texture: {fileID: 2800000, guid: b564ef71400a25f48a92b590802a9b99, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseMap:
+        m_Texture: {fileID: 2800000, guid: b564ef71400a25f48a92b590802a9b99, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 1d52cad9b6b24492ebcdb2b9d7f7f452, type: 3}
+        m_Scale: {x: 0.1, y: 0.1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMapDetail:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaCutoff: 0.5
+    - _CausticFade: 0.164
+    - _CausticIntensity: 0.94
+    - _CausticUVScale: 1
+    - _CloudIntensity: 0.171
+    - _CloudMoveSpeed: 0.01
+    - _DeepDistance: 3.91
+    - _Density: 0.867
+    - _DetailMapScale: 1
+    - _DetailNormalMapScale: 0.96
+    - _DiffuseIntensity: 1
+    - _DiffuseNormalMapIntensity: 0.318
+    - _EnableCloudMap: 0
+    - _EnableDynamicFoam: 1
+    - _EnableFoam: 1
+    - _FoamFadeDistance: 0.662
+    - _FoamSpeed: 1
+    - _FoamWidth: 0.98
+    - _NormalMapIntensity: 1
+    - _NormalMapScale: 1
+    - _PerPixelCompareBias: 1
+    - _PerPixelDepthBias: 0
+    - _RefType: 0
+    - _SSPRDistortion: 0.005
+    - _SSRIntensity: 2
+    - _SSRMaxSampleCount: 64
+    - _SSRNormalDistortion: 0
+    - _SSRSampleStep: 32
+    - _SSSDistance: 0.258
+    - _SSSExp: 1
+    - _SSSIntensity: 2.04
+    - _SSSNormalDistortion: 1
+    - _SepcularNormalMapIntensity: 0.229
+    - _ShadowIntensity: 0.595
+    - _ShallowDistance: 0.8
+    - _SpecularIntensity: 0.34
+    - _SpecularRange: 0.064
+    - _UseProceduralCaustic: 1
+    - _UseShadow: 1
+    - _WaveColorIntensity: 0.743
+    m_Colors:
+    - _CloudColor: {r: 0, g: 0, b: 0, a: 1}
+    - _DeepColor: {r: 0.115521505, g: 0.3873024, b: 0.6226415, a: 1}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FoamColor: {r: 0.432, g: 0.432, b: 0.432, a: 1}
+    - _FoamNoisePowScaleVec: {r: 1.7, g: 24.24, b: 1, a: 1}
+    - _SSPRFresnelVec: {r: 2.62, g: 0.5, b: 0, a: 0}
+    - _SSSColor: {r: 1.371069, g: 0.43768066, b: 0, a: 1}
+    - _ShallowColor: {r: 0.29874206, g: 1, b: 0.5844398, a: 1}
+    - _SpecularColor: {r: 0.99371064, g: 0.6995193, b: 0.5218543, a: 1}
+    - _TBNVec: {r: 1, g: 2, b: 1, a: 1}
+    - _WindDirection: {r: 1, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []
