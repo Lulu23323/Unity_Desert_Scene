@@ -6,11 +6,10 @@ using UnityEditor;
 
 public class RutPainter : MonoBehaviour
 {
-    //公开
-    public Transform playerTf;//玩家对象
-    public Renderer groundRenderer;//地面渲染器
-    public float paintSize = 64;//绘制矩形边长
-    public float attenTime = 10;//淡化时间
+    public Transform playerTf;
+    public Renderer groundRenderer;
+    public float paintSize = 64;
+    public float attenTime = 10;
     public enum RTSize
     {
        _256 = 256,
@@ -18,14 +17,13 @@ public class RutPainter : MonoBehaviour
        _1024 = 1024,
        _2048 = 2048
     }
-    public RTSize rtSize = RTSize._1024;//渲染纹理尺寸
-
-    //内置
-    public RenderTexture paintRT;//轨迹渲染纹理 RGB法线 A高度
-    private Material paintMat;//更新法线高度
-    private Material fadeMat;//轨迹淡化计算材质
-    public Material groundMat;//地形材质
-    private Vector3 playerOldPos;//上次绘制时玩家的位置(经过离散化截断）
+    public RTSize rtSize = RTSize._1024;
+    
+    public RenderTexture paintRT;
+    private Material paintMat;
+    private Material fadeMat;
+    public Material groundMat;
+    private Vector3 playerOldPos;
     private void Start()
     {
         InitPaintProp();
@@ -33,60 +31,50 @@ public class RutPainter : MonoBehaviour
 
     private void Update()
     {
-        //轨迹淡化
         RenderTexture tempRT = RenderTexture.GetTemporary(paintRT.descriptor);
         Graphics.Blit(paintRT, tempRT, fadeMat, 0);
         Graphics.Blit(tempRT, paintRT);
         RenderTexture.ReleaseTemporary(tempRT);
     }
-
-    //初始化绘制属性
+    
     public void InitPaintProp()
     {
         if (playerTf)
         {
             playerOldPos = playerTf.position;
-
-            //初始化交换纹理
+            
             Texture2D tempTex = new Texture2D(1, 1, TextureFormat.ARGB32, 0, true);
             tempTex.SetPixel(0, 0, new Color(0.5f, 0.5f, 1, 0.5f));
             tempTex.Apply();
-
-            //初始化轨迹RT设置
+            
             paintRT = new RenderTexture((int)rtSize, (int)rtSize, 0, RenderTextureFormat.ARGB64, RenderTextureReadWrite.Linear);
             paintRT.wrapMode = TextureWrapMode.Clamp;
             paintRT.filterMode = FilterMode.Bilinear;
             paintRT.anisoLevel = 0;
             Graphics.Blit(tempTex, paintRT);
-
-            //地形材质配置
+            
             groundMat = groundRenderer.sharedMaterial;
             groundMat.SetTexture("_RutRTTex", paintRT);
-
-            //初始化渲染材质
+            
             paintMat = new Material(Shader.Find("Scene/RutPaint"));
             fadeMat = new Material(Shader.Find("Scene/RutFade"));
             fadeMat.SetFloat("_AttenTime", attenTime);
         }
     }
-
-    //绘制方法
+    
     public void Paint(Transform tfIN, Texture2D brushTex, float brushRadius, float brushInt)
     {
         Vector4 pos_Offset;
-
-        //如果输入对象是玩家，则额外计算纹理偏移与地形材质的范围参数
+        
         if (tfIN == playerTf)
         {
-            //位移向量按纹理尺寸离散化，抵消采样时的抖动
             Vector3 deltaDir01 = (playerTf.position - playerOldPos) / paintSize;
             int tempRtSize = (int)rtSize;
             deltaDir01 = deltaDir01 * tempRtSize;
             deltaDir01.x = Mathf.Floor(deltaDir01.x) / tempRtSize;
             deltaDir01.z = Mathf.Floor(deltaDir01.z) / tempRtSize;
             pos_Offset = new Vector4(0.5f, 0.5f, deltaDir01.x, deltaDir01.z);
-
-            //地形材质范围更新
+            
             playerOldPos += deltaDir01 * paintSize;
             playerOldPos.y = playerTf.position.y;
             float halfSize = paintSize / 2;
@@ -94,21 +82,18 @@ public class RutPainter : MonoBehaviour
             Vector3 pos11 = playerOldPos + new Vector3(halfSize, 0, halfSize);
             groundMat.SetVector("_PaintRect", new Vector4(pos00.x, pos00.z, pos11.x, pos11.z));
         }
-
-        //非玩家，计算当前对象相对玩家的归一化位置
+        
         else
         {
             Vector3 deltaDir01 = (tfIN.position - playerTf.position) / paintSize;
             pos_Offset = new Vector4(0.5f + deltaDir01.x, 0.5f + deltaDir01.z, 0, 0);
         }
-
-        //轨迹材质参数配置
+        
         paintMat.SetTexture("_BrushTex", brushTex);
         paintMat.SetVector("_BrushPosTS_Offset", pos_Offset);
         paintMat.SetFloat("_BrushRadius", brushRadius / paintSize);
         paintMat.SetFloat("_BrushInt", brushInt);
-
-        //轨迹RT
+        
         RenderTexture tempRT = RenderTexture.GetTemporary(paintRT.descriptor);
         Graphics.Blit(paintRT, tempRT, paintMat, 0);
         Graphics.Blit(tempRT, paintRT);
@@ -128,26 +113,25 @@ class RutPainterEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        //撤销堆栈
         Undo.RecordObject(dst, "RutPainter");
 
-        //公共参数
-        GUILayout.Label("当前单位像素长度 = " + dst.paintSize / (float)dst.rtSize);
-        dst.playerTf = EditorGUILayout.ObjectField("玩家", dst.playerTf, typeof(Transform), true) as Transform;
-        dst.groundRenderer = EditorGUILayout.ObjectField("地面渲染器", dst.groundRenderer, typeof(Renderer), true) as Renderer;
-        dst.paintSize = EditorGUILayout.Slider("绘制范围", dst.paintSize, 8, 512);
-        dst.attenTime = EditorGUILayout.Slider("淡化时间", dst.attenTime, 0.5f, 60);
-        dst.rtSize = (RutPainter.RTSize)EditorGUILayout.EnumPopup("渲染纹理分辨率", dst.rtSize);
+        GUILayout.Label("Current Unit Pixel Length = " + dst.paintSize / (float)dst.rtSize);
+        dst.playerTf = EditorGUILayout.ObjectField("Player", dst.playerTf, typeof(Transform), true) as Transform;
+        dst.groundRenderer = EditorGUILayout.ObjectField("Ground Renderer", dst.groundRenderer, typeof(Renderer), true) as Renderer;
+        dst.paintSize = EditorGUILayout.Slider("Paint Range", dst.paintSize, 8, 512);
+        dst.attenTime = EditorGUILayout.Slider("Fade Time", dst.attenTime, 0.5f, 60);
+        dst.rtSize = (RutPainter.RTSize)EditorGUILayout.EnumPopup("Render Texture Resolution", dst.rtSize);
         GUI.enabled = false;
-        dst.paintRT = EditorGUILayout.ObjectField("轨迹纹理", dst.paintRT, typeof(RenderTexture), true) as RenderTexture;
+        dst.paintRT = EditorGUILayout.ObjectField("Trail Texture", dst.paintRT, typeof(RenderTexture), true) as RenderTexture;
         GUI.enabled = true;
-        if (GUILayout.Button("刷新绘制状态"))
+        if (GUILayout.Button("Refresh Paint Status"))
         {
             dst.InitPaintProp();
         }
 
         SceneView.RepaintAll();
     }
+
 
     private void OnSceneGUI()
     {

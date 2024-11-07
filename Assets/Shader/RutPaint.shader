@@ -3,14 +3,15 @@
     Properties
     {
         [Header(Texture)]
-        [NoScaleOffset] _MainTex("轨迹渲染纹理", 2D) = "bump" {}//渲染纹理命名为_MainTex，保证Graphics.Blit传递正确
-        [NoScaleOffset] _BrushTex ("笔刷法线高度图", 2D) = "bump" {}
+        [NoScaleOffset] _MainTex("Trail Render Texture", 2D) = "bump" {} // Render texture named _MainTex to ensure correct passing with Graphics.Blit
+        [NoScaleOffset] _BrushTex("Brush Normal Height Map", 2D) = "bump" {}
 
         [Space(20)]
         [Header(Shape)]
-        _BrushPosTS_Offset ("笔刷UV坐标", vector) = (0.5, 0.5, 0.0, 0.0)
-        _BrushRadius ("笔刷半径", range(0, 0.5)) = 0.005
-        _BrushInt ("笔刷强度", range(0, 2)) = 1.0
+        _BrushPosTS_Offset("Brush UV Coordinates", vector) = (0.5, 0.5, 0.0, 0.0)
+        _BrushRadius("Brush Radius", range(0, 0.5)) = 0.005
+        _BrushInt("Brush Intensity", range(0, 2)) = 1.0
+
     }
     SubShader
     {
@@ -30,17 +31,13 @@
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl" 
 
             CBUFFER_START(UnityPerMaterial)
-                //贴图
                 sampler2D _MainTex;
                 sampler2D _BrushTex;
-
-                //形状
                 float4 _BrushPosTS_Offset;
                 float _BrushRadius;
                 float _BrushInt;
             CBUFFER_END
-
-            //重映射01
+            
             float Remap(float min, float max, float input)
             {
                 float k = 1.0 / (max - min);
@@ -65,15 +62,9 @@
             v2f vert(a2v i)
             {
                 v2f o;
-
-                //坐标
                 o.posCS = TransformObjectToHClip(i.posOS.xyz);
-
-                //UV
                 o.uv0 = i.uv0;
                 o.uv_Main = i.uv0 + _BrushPosTS_Offset.zw;
-
-                //笔刷局部UV计算
                 float2 uv00 = _BrushPosTS_Offset.xy - _BrushRadius;
                 float2 uv11 = _BrushPosTS_Offset.xy + _BrushRadius;
                 o.uv_Brush = float2(Remap(uv00.x, uv11.x, i.uv0.x), Remap(uv00.y, uv11.y, i.uv0.y));

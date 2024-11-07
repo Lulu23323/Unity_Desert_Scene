@@ -3,8 +3,8 @@
     Properties
     {
         [Header(Texture)]
-        [NoScaleOffset] _MainTex("轨迹渲染纹理", 2D) = "black" {}
-        _AttenTime ("衰减时间", float) = 10
+        [NoScaleOffset] _MainTex("Trail Render Texture", 2D) = "black" {}
+        _AttenTime ("Attenuation Time", float) = 10
     }
     SubShader
     {
@@ -43,11 +43,7 @@
             v2f vert(a2v i)
             {
                 v2f o;
-
-                //坐标
                 o.posCS = TransformObjectToHClip(i.posOS.xyz);
-
-                //UV
                 o.uv0 = i.uv0;
 
                 return o;
